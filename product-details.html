@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Produto</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 90%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+        }
+        .banner {
+            width: 100%;
+            height: 150px;
+            background-image: url('https://i.im.ge/2024/09/03/fbD1XP.loja-Logo-94309.jpeg');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+        .banner img {
+            max-width: 100%;
+            height: auto;
+        }
+        .categories-container {
+            display: flex;
+            overflow-x: auto;
+            white-space: nowrap;
+            margin-bottom: 20px;
+            padding: 10px 0;
+            background-color: #fff;
+        }
+        .categories-container button {
+            background-color: #004C61;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin: 0 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+        .categories-container button:hover {
+            background-color: #0056b3;
+        }
+        .product-image {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+        }
+        .product-details {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .product-details h1 {
+            font-size: 2em;
+            margin: 10px 0;
+        }
+        .product-details p {
+            font-size: 1.2em;
+            color: #333;
+        }
+        .add-to-cart-button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .add-to-cart-button.disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+        .add-to-cart-button:hover:not(.disabled) {
+            background-color: #218838;
+        }
+        .back-link {
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+            font-size: 1em;
+            color: #007bff;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Estilo para o botão flutuante de WhatsApp */
+        .whatsapp-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            text-align: center;
+            z-index: 100;
+        }
+
+        .whatsapp-text {
+            display: block;
+            color: #25D366;
+            font-weight: bold;
+            margin-bottom: 20px;
+            font-size: 15px;
+        }
+
+        .whatsapp-button {
+            background-color: #25D366;
+            color: white;
+            border-radius: 50%;
+            padding: 15px;
+            font-size: 25px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+        }
+
+        .whatsapp-button:hover {
+            background-color: #1ebe57;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <!-- Banner clicável para voltar à página inicial -->
+    <div class="banner" onclick="window.location.href='index.html'">
+        <img src="https://i.im.ge/2024/09/03/fbD1XP.loja-Logo-94309.jpeg" alt="Logo da Loja">
+    </div>
+
+    <!-- Container para categorias -->
+    <div class="categories-container">
+        <button onclick="filterByCategory('all')">Todos</button>
+        <button onclick="filterByCategory('categoria1')">CABOS</button>
+        <button onclick="filterByCategory('categoria2')">CARREGADOR</button>
+        <button onclick="filterByCategory('categoria3')">FONE</button>
+        <button onclick="filterByCategory('categoria4')">CAIXA SOM</button>
+        <button onclick="filterByCategory('categoria5')">UTILIDADES</button>
+        <button onclick="filterByCategory('categoria6')">OUTROS</button>
+    </div>
+
+    <!-- Botão Flutuante WhatsApp com texto "Novidades" -->
+    <div class="whatsapp-container">
+        <span class="whatsapp-text">Novidades</span>
+        <a href="https://wa.me/5521989650979?text=QUERO MELHORES PRODUTOS" class="whatsapp-button" target="_blank">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+    </div>
+
+    <div class="container">
+        <div class="product-details" id="product-details">
+            <!-- Detalhes do produto serão carregados aqui -->
+        </div>
+        <a href="index.html" class="back-link">Voltar para a Loja</a>
+    </div>
+
+    <script>
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        function loadProductDetails() {
+            const productId = getQueryParam('id');
+            if (!productId) {
+                document.getElementById('product-details').innerHTML = '<p>Produto não encontrado.</p>';
+                return;
+            }
+
+            fetch('products.html')
+                .then(response => response.text())
+                .then(text => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(text, 'text/html');
+                    const productsList = Array.from(doc.getElementById('products-list').children);
+                    const product = productsList.find(p => p.getAttribute('data-id') === productId);
+
+                    if (product) {
+                        const name = product.getAttribute('data-name') || 'Nome do Produto';
+                        const image = product.getAttribute('data-image') || 'default-image.jpg';
+                        const description = product.getAttribute('data-description') || 'Descrição não disponível';
+                        const price = product.getAttribute('data-price') || 'Preço não disponível';
+                        const category = product.getAttribute('data-category') || 'Categoria não especificada';
+                        const available = product.getAttribute('data-available') === 'true';
+
+                        const addToCartButton = available
+                            ? '<button class="add-to-cart-button" onclick="addToCart(' + productId + ')">Adicionar ao Carrinho</button>'
+                            : '<button class="add-to-cart-button disabled" disabled>Produto Esgotado</button>';
+
+                        document.getElementById('product-details').innerHTML = `
+                            <img src="${image}" alt="${name}" class="product-image">
+                            <h1>${name}</h1>
+                            <p>Categoria: ${category}</p>
+                            <p>${description}</p>
+                            <p>Preço: ${price}</p>
+                            ${addToCartButton}
+                        `;
+                    } else {
+                        document.getElementById('product-details').innerHTML = '<p>Produto não encontrado.</p>';
+                    }
+                })
+                .catch(error => console.error('Erro ao carregar detalhes do produto:', error));
+        }
+
+        function addToCart(productId) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            fetch('products.html')
+                .then(response => response.text())
+                .then(text => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(text, 'text/html');
+                    const productsList = Array.from(doc.getElementById('products-list').children);
+                    const product = productsList.find(p => p.getAttribute('data-id') === String(productId));
+
+                    if (product) {
+                        const available = product.getAttribute('data-available') === 'true';
+                        if (!available) {
+                            alert('Produto esgotado e não pode ser adicionado ao carrinho.');
+                            return;
+                        }
+
+                        const productDetails = {
+                            id: productId,
+                            name: product.getAttribute('data-name') || 'Nome do Produto',
+                            image: product.getAttribute('data-image') || 'default-image.jpg',
+                            price: product.getAttribute('data-price') || 'Preço não disponível'
+                        };
+
+                        const cartItem = cart.find(item => item.id === productId);
+                        if (cartItem) {
+                            cartItem.quantity++;
+                        } else {
+                            cart.push({ ...productDetails, quantity: 1 });
+                        }
+                        localStorage.setItem('cart', JSON.stringify(cart));
+                        alert('Produto adicionado ao carrinho!');
+                    }
+                })
+                .catch(error => console.error('Erro ao adicionar produto ao carrinho:', error));
+        }
+
+        function filterByCategory(category) {
+            window.location.href = `index.html?category=${category}`;
+        }
+
+        loadProductDetails();
+    </script>
+</body>
+</html>

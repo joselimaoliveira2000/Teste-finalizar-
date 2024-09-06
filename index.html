@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loja</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 90%;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+        .banner {
+            width: 100%;
+            height: 200px;
+            background-image: url('https://i.im.ge/2024/09/03/fbD1XP.loja-Logo-94309.jpeg');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 2em;
+            text-align: center;
+        }
+        .banner a {
+            text-decoration: none;
+            color: white;
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+        .search-container {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .search-container input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            width: 300px;
+            border: 2px solid #ddd;
+            border-radius: 5px 0 0 5px;
+        }
+        .search-container button {
+            padding: 10px;
+            font-size: 18px;
+            background-color: white;
+            color: white;
+            border: 2px solid black;
+            border-radius: 2 5px 5px 0;
+            cursor: pointer;
+        }
+        .search-container button:hover {
+            background-color: #0056b3;
+        }
+        .cart-link {
+            display: block;
+            margin: 20px 0;
+            padding: 10px 20px;
+            background-color: #0088EB;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .cart-link:hover {
+            background-color: #0056b3;
+        }
+        #category-menu {
+            display: flex;
+            justify-content: start;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding: 10px 0;
+            background-color: #fff;
+        }
+        #category-menu button {
+            flex: 0 0 auto;
+            padding: 10px 20px;
+            margin: 0 5px;
+            background-color: #004C61;
+            font-family: roboto;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #category-menu button:hover {
+            background-color: #0056b3;
+        }
+        #products {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 5px;
+        }
+        .product {
+            background-color: #fff;
+            border: 2px solid #ddd;
+            padding: 10px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            box-sizing: border-box;
+        }
+        .product img {
+            max-width: 60%;
+            height: auto;
+        }
+        .product button {
+            background-color: #28a745;
+            color: white;
+            border: 2px solid black;
+            padding: 5px 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        .product button i {
+            margin-left: 5px;
+        }
+        .product button:hover {
+            background-color: #218838;
+        }
+        .product button.out-of-stock {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+        .product button.out-of-stock:hover {
+            background-color: #6c757d;
+        }
+        .product button.view-details {
+            background: none;
+            border: none;
+            color: #007bff;
+            font-size: 16px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        .product button.view-details:hover {
+            text-decoration: underline;
+        }
+
+        /* Estilo do botão flutuante do WhatsApp com texto */
+        .whatsapp-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            text-align: center;
+            z-index: 100;
+        }
+
+        .whatsapp-text {
+            display: block;
+            color: #25D366;
+            font-weight: bold;
+            margin-bottom: 20px;
+            font-size: 12px;
+        }
+
+        .whatsapp-button {
+            background-color: #25D366;
+            color: white;
+            border-radius: 50%;
+            padding: 15px;
+            font-size: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+        }
+
+        .whatsapp-button:hover {
+            background-color: #1ebe57;
+        }
+    </style>
+</head>
+<body>
+    <!-- Banner com link para a página inicial -->
+    <div class="banner">
+        <a href="index.html"></a>
+    </div>
+
+    <!-- Caixa de pesquisa -->
+    <div class="search-container">
+        <input type="text" id="search-input" placeholder="Procurar produtos...">
+        <button onclick="searchProducts()">🔎</button>
+    </div>
+
+    <!-- Menu de Categorias com rolagem horizontal -->
+    <div id="category-menu">
+        <button onclick="filterByCategory('all')">Todos</button>
+        <button onclick="filterByCategory('cabos')">CABOS</button>
+        <button onclick="filterByCategory('carregador')">CARREGADOR</button>
+        <button onclick="filterByCategory('fone')">FONE</button>
+        <button onclick="filterByCategory('caixasom')">CAIXA SOM</button>
+        <button onclick="filterByCategory('utilidades')">UTILIDADES</button>
+        <button onclick="filterByCategory('outros')">OUTROS</button>
+    </div>
+
+    <a href="carrinho.html" class="cart-link">Ver Carrinho 🛒</a>
+    <div id="products"></div>
+
+    <!-- Botão Flutuante WhatsApp com texto -->
+    <div class="whatsapp-container">
+        <span class="whatsapp-text">Novidades </span>
+        <a href="https://wa.me/5521989650979?text=QUERO MELHORES PRODUTOS" class="whatsapp-button" target="_blank">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+    </div>
+
+    <script>
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+        function displayProducts(products = null) {
+            const productContainer = document.getElementById('products');
+            productContainer.innerHTML = ''; // Limpa os produtos atuais
+
+            fetch('products.html')
+                .then(response => response.text())
+                .then(text => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(text, 'text/html');
+                    const productsList = doc.getElementById('products-list').children;
+
+                    const filteredProducts = products || Array.from(productsList);
+
+                    filteredProducts.forEach(product => {
+                        const id = product.getAttribute('data-id');
+                        const name = product.getAttribute('data-name');
+                        const image = product.getAttribute('data-image');
+                        const price = product.getAttribute('data-price');
+                        const available = product.getAttribute('data-available') === 'true';
+
+                        productContainer.innerHTML += `
+                            <div class="product" data-category="${product.getAttribute('data-category')}">
+                                <img src="${image}" alt="${name}">
+                                <h3>${name}</h3>
+                                <p>${price}</p>
+                                <button class="view-details" onclick="showProductDetails(${id})">
+                                    Ver Detalhes <i class="fas fa-info-circle"></i>
+                                </button>
+                                ${available ? 
+                                    `<button onclick="addToCart(${id})">
+                                        Adicionar ao Carrinho <i class="fas fa-shopping-cart"></i>
+                                    </button>` :
+                                    `<button class="out-of-stock" disabled>
+                                        Produto Esgotado
+                                    </button>`
+                                }
+                            </div>
+                        `;
+                    });
+                })
+                .catch(error => console.error('Erro ao carregar produtos:', error));
+        }
+
+        function showProductDetails(productId) {
+            window.location.href = `product-details.html?id=${productId}`;
+        }
+
+        function addToCart(productId) {
+            fetch('products.html')
+                .then(response => response.text())
+                .then(text => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(text, 'text/html');
+                    const productsList = doc.getElementById('products-list').children;
+                    const product = Array.from(productsList).find(p => p.getAttribute('data-id') === String(productId));
+
+                    if (product) {
+                        const available = product.getAttribute('data-available') === 'true';
+                        if (!available) {
+                            alert('Produto esgotado e não pode ser adicionado ao carrinho.');
+                            return;
+                        }
+
+                        const productDetails = {
+                            id: productId,
+                            name: product.getAttribute('data-name'),
+                            image: product.getAttribute('data-image'),
+                            price: product.getAttribute('data-price')
+                        };
+
+                        const cartItem = cart.find(item => item.id === productId);
+                        if (cartItem) {
+                            cartItem.quantity++;
+                        } else {
+                            cart.push({ ...productDetails, quantity: 1 });
+                        }
+                        localStorage.setItem('cart', JSON.stringify(cart));
+                        alert('Produto adicionado ao carrinho!');
+                    }
+                })
+                .catch(error => console.error('Erro ao adicionar produto ao carrinho:', error));
+        }
+
+        function searchProducts() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            fetch('products.html')
+                .then(response => response.text())
+                .then(text => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(text, 'text/html');
+                    const productsList = Array.from(doc.getElementById('products-list').children);
+                    
+                    const filteredProducts = productsList.filter(product => 
+                        product.getAttribute('data-name').toLowerCase().includes(query)
+                    );
+
+                    displayProducts(filteredProducts);
+                })
+                .catch(error => console.error('Erro ao filtrar produtos:', error));
+        }
+
+        function filterByCategory(category) {
+            fetch('products.html')
+                .then(response => response.text())
+                .then(text => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(text, 'text/html');
+                    const productsList = Array.from(doc.getElementById('products-list').children);
+
+                    const filteredProducts = category === 'all' ? productsList : productsList.filter(product => 
+                        product.getAttribute('data-category') === category
+                    );
+
+                    displayProducts(filteredProducts);
+                })
+                .catch(error => console.error('Erro ao filtrar produtos por categoria:', error));
+        }
+
+        displayProducts();
+    </script>
+</body>
+</html>

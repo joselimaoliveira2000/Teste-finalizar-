@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrinho de Compras</title>
+    <style>
+   @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .container {
+        
+           max-height: 1200px;
+            width: 90%;
+            margin: auto ;
+           padding: 20px;
+          
+           
+
+        }
+
+        .title {
+            text-align: center;
+            font-size: 2.5em;
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .cart {
+            padding: 20px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .cart ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+        }
+
+        .cart ul li {
+            display: flex;
+            flex-direction: column;
+            padding: 15px;
+            background: #fafafa;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .product-info img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            margin-right: 15px;
+            border-radius: 8px;
+        }
+
+        .product-details {
+            flex: 1;
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .quantity-control button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 14px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            width: 30px;
+            height: 30px;
+            margin: 0 5px;
+        }
+
+        .quantity-control button:hover {
+            background-color: #0056b3;
+        }
+
+        .quantity-control input {
+
+            width: 40px;
+            text-align: center;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            padding: 5px;
+            font-size: 14px;
+            border-radius: 5px;
+            background: #fafafa;
+        }
+
+        .total {
+            margin-top: 20px;
+            font-size: 1.2em;
+            font-weight: 700;
+            text-align: right;
+        }
+
+        .item-price {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .primary-btn {
+            background-color: #28a745;
+        }
+
+        .primary-btn:hover {
+            background-color: #218838;
+        }
+
+        form {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        form input, form button {
+            padding: 10px;
+            margin: 5px 0;
+            font-size: 14px;
+            border-radius: 5px;
+        }
+
+        form input {
+            width: calc(100% - 22px);
+            border: 1px solid #ddd;
+        }
+
+        form button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        form button:hover {
+            background-color: #0056b3;
+        }
+
+        .pedido {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            width: 100%;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .pedido:hover {
+            background-color: #218838;
+        }
+
+       
+
+        @media (max-width: 1200px) {
+            .container {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .title {
+                font-size: 2em;
+            }
+            .cart {
+                padding: 15px;
+            }
+            .cart ul li {
+                padding: 10px;
+            }
+            .product-info img {
+                width: 60px;
+                height: 60px;
+            }
+            .quantity-control button {
+                padding: 4px 8px;
+                font-size: 12px;
+                width: 25px;
+                height: 25px;
+            }
+            .quantity-control input {
+                width: 35px;
+                font-size: 12px;
+            }
+            .total {
+                font-size: 1.1em;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                width: 100%;
+            }
+            .title {
+                font-size: 1.8em;
+            }
+            .cart {
+                padding: 10px;
+            }
+            .cart ul li {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 8px;
+            }
+            .product-info {
+                flex-direction: column;
+                align-items: flex-start;
+                margin-right: 0;
+            }
+            .product-info img {
+                width: 60px;
+                height: 60px;
+                margin-bottom: 10px;
+            }
+            .quantity-control {
+                flex-direction: row;
+                align-items: center;
+                margin-left: 0;
+            }
+            .quantity-control button {
+                width: 25px;
+                height: 25px;
+            }
+            .quantity-control input {
+                width: 30px;
+                font-size: 12px;
+            }
+            .total {
+                font-size: 1em;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .title {
+                font-size: 1.5em;
+            }
+            .cart {
+                padding: 5px;
+            }
+            .cart ul li {
+                padding: 5px;
+            }
+            .product-info img {
+                width: 50px;
+                height: 50px;
+            }
+            .quantity-control button {
+                width: 30px;
+                height: 30px;
+                font-size: 15px;
+        
+            
+            }
+.remove-btn{
+
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+
+}
+            .quantity-control input {
+                width: 30px;
+                font-size: 20px;
+            }
+            .total {
+                font-size: 0.9em;
+            }
+            form input, form button {
+                font-size: 12px;
+            }
+        }
+.banner {
+            width: 100%;
+            height: 200px;
+            background-image: url('https://i.im.ge/2024/09/03/fbD1XP.loja-Logo-94309.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 2em;
+            text-align: center;
+            padding: 0 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .banner a {
+            text-decoration: none;
+            color: white;
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Seu CSS permanece o mesmo até aqui */
+
+        /* Estilizando a seção de informações do cliente */
+        .customer-info {
+            margin-top: 20px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            display: none; /* Inicialmente oculto */
+        }
+
+        .customer-info input, .customer-info select {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin: 5px 0;
+            font-size: 14px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .customer-info button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background-color: #007bff;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .customer-info button:hover {
+            background-color: #0056b3;
+        }
+
+        .pedido {
+            display: none; /* Oculte inicialmente */
+        }
+
+        /* Restante do CSS permanece o mesmo */
+    </style>
+</head>
+<body>
+    <div class="banner">
+        <a href="index.html"></a>
+    </div>
+    
+    <div class="container">
+        <h1 class="title">Carrinho de Compras</h1>
+        <div class="cart">
+            <ul id="cart-list">
+                <!-- Itens do carrinho serão inseridos aqui -->
+            </ul>
+            <div class="total">
+                Total: <span id="total-price">R$ 0,00</span>
+            </div>
+            <!-- O botão de enviar pedido agora está oculto até que o formulário seja preenchido -->
+            <button class="pedido" onclick="sendWhatsApp()">Enviar Pedido WhatsApp</button>
+        </div>
+
+        <!-- Formulário para capturar informações do usuário -->
+        <div class="customer-info" id="customer-info">
+            <h2>Informações do Cliente</h2>
+            <form id="customer-form">
+                <input type="text" id="name" placeholder="Nome Completo" required>
+                <input type="text" id="address" placeholder="Endereço Completo" required>
+                <select id="payment-method" required>
+                    <option value="" disabled selected>Selecione a Forma de Pagamento</option>
+                    <option value="cartão">Cartão de Crédito/Débito</option>
+                    <option value="boleto">Boleto</option>
+                    <option value="pix">Pix</option>
+                </select>
+                <button type="button" onclick="confirmOrder()">Confirmar Informações</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+        // Função para mostrar os itens no carrinho
+        function displayCart() {
+            const cartList = document.getElementById('cart-list');
+            cartList.innerHTML = '';
+            cart.forEach((item, index) => {
+                const pricePerUnit = parseFloat(item.price.replace('R$', '').replace(',', '.'));
+                const itemTotalPrice = pricePerUnit * item.quantity;
+                cartList.innerHTML += `
+                    <li>
+                        <div class="product-info">
+                            <img src="${item.image}" alt="${item.name}">
+                            <div>
+                                ${item.name} - <span class="item-price">Unitário: R$ ${pricePerUnit.toFixed(2).replace('.', ',')} | Total: R$ ${itemTotalPrice.toFixed(2).replace('.', ',')}</span>
+                            </div>
+                        </div>
+                        <div class="quantity-control">
+                            <button onclick="updateQuantity(${index}, ${item.quantity - 1})">🔽</button>
+                            <input type="number" value="${item.quantity}" readonly>
+                            <button onclick="updateQuantity(${index}, ${item.quantity + 1})">🔼</button>
+                        </div>
+                        <button class="remove-btn" onclick="removeFromCart(${index})">Remover</button>
+                    </li>
+                `;
+            });
+            updateTotal();
+            // Se o carrinho tiver itens, mostre o formulário de informações do cliente
+            if (cart.length > 0) {
+                document.getElementById('customer-info').style.display = 'block';
+            } else {
+                document.getElementById('customer-info').style.display = 'none';
+            }
+        }
+
+        // Função para confirmar informações do pedido
+        function confirmOrder() {
+            const name = document.getElementById('name').value;
+            const address = document.getElementById('address').value;
+            const paymentMethod = document.getElementById('payment-method').value;
+
+            if (name && address && paymentMethod) {
+                document.querySelector('.pedido').style.display = 'block'; // Mostre o botão de envio
+                alert('Informações confirmadas! Agora você pode enviar seu pedido.');
+            } else {
+                alert('Por favor, preencha todos os campos.');
+            }
+        }
+
+        // Função para enviar lista via WhatsApp
+        function sendWhatsApp() {
+            const name = document.getElementById('name').value;
+            const address = document.getElementById('address').value;
+            const paymentMethod = document.getElementById('payment-method').value;
+
+            let message = `MEU PEDIDO SELECIONADO :\n`;
+            cart.forEach(item => {
+                message += `- ${item.name} (${item.quantity}x) - Unitário: ${item.price}\n`;
+            });
+            message += `\nTotal: R$ ${document.getElementById('total-price').innerText.split('R$ ')[1]}`;
+            message += `\n\nNome: ${name}\nEndereço: ${address}\nForma de Pagamento: ${paymentMethod}`;
+            const whatsappURL = `https://wa.me/5521989650979?text=${encodeURIComponent(message)}`;
+            window.open(whatsappURL, '_blank');
+        }
+
+        // Função para atualizar a quantidade de um produto
+        function updateQuantity(index, newQuantity) {
+            if (newQuantity < 1) return; // Evita que a quantidade seja menor que 1
+            cart[index].quantity = newQuantity;
+            localStorage.setItem('cart', JSON.stringify(cart));
+            displayCart();
+        }
+
+        // Função para remover um item do carrinho
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            displayCart();
+        }
+
+        // Função para calcular e atualizar o valor total
+        function updateTotal() {
+            let total = 0;
+            cart.forEach(item => {
+                const price = parseFloat(item.price.replace('R$', '').replace(',', '.'));
+                total += price * item.quantity;
+            });
+            document.getElementById('total-price').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+        }
+
+        // Inicializar a página com os itens do carrinho
+        displayCart();
+    </script>
+</body>
+</html>
